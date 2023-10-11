@@ -5,8 +5,12 @@ from numpy import random
 class MlpBase:
     def __init__(self, layersDescription):
         self.layers = []
-        for layerSize in layersDescription:
-            self.layers.append([random.uniform(0, 1) for _ in range(layerSize)])
+        for i in range(len(layersDescription) - 1):
+            self.layers.append(np.random.random((layersDescription[i], layersDescription[i + 1])))
 
     def __str__(self):
-        return f"{self.layers}"
+        result = ""
+        for i in range(len(self.layers)):
+            result += self.layers[i].__str__()
+            result += "\n\n"
+        return result
