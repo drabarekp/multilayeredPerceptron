@@ -1,16 +1,14 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# main function of mlp app
 from MlpBase import MlpBase
 
-def print_hi(name):
+
+# temporary function for testing and getting feedback from mlp
+def peek():
     mlp = MlpBase([3, 4, 1])
-    print(mlp)
+    output = mlp.operation([0.5, 0.5, 0.5])
+    print(f"out={output}")
 
 
-# Press the green button in the gutter to run the script.
+# main
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    peek()
