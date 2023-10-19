@@ -1,6 +1,6 @@
 import numpy as np
-import SpecialFunctions as sf
-from numpy import random
+import functions as sf
+# from numpy import random - TODO: replace with seeded random
 
 
 class MlpBase:
@@ -20,7 +20,7 @@ class MlpBase:
 
         for i in range(len(layers_description) - 1):
             self.layers.append(np.random.random((layers_description[i + 1], layers_description[i])))
-            #self.biases.append(np.random.random(size=layers_description[i + 1]))
+            # self.biases.append(np.random.random(size=layers_description[i + 1]))
             self.biases.append(np.zeros(layers_description[i + 1]))
 
     def operation(self, _input):
