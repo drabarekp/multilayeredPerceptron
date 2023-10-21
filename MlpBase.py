@@ -54,8 +54,10 @@ class MlpBase:
         error_delta.insert(0, last_delta)
 
         for i in reversed(range(self.layer_count() - 1)):
-            current_delta = ((self.layers[i] @ error_delta[0]) *
-                             self.activation_derivative(self.node_values_pre_activation[i+1]))
+            a = self.layers[i + 1].transpose()
+            b = error_delta[0]
+            c = self.activation_derivative(self.node_values_pre_activation[i + 1])
+            current_delta = (a @ b) * c
 
             error_delta.insert(0, current_delta)
 

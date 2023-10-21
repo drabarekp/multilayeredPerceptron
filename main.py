@@ -14,7 +14,7 @@ def peek():
 
     # test()
     for i in range(10000):
-        expected_output = [0.8]
+        expected_output = [0.2]
         deltas = mlp.learn(np.array([0.3, 0.6]), np.array(expected_output))
         #try:
             #deltas = mlp.learn(np.array([0.3, 0.3]), np.array(expected_output))
