@@ -1,13 +1,16 @@
 import numpy as np
 import functions as sf
-# from numpy import random - TODO: replace with seeded random
+
+
+# DONE: added seed
 
 
 class MlpBase:
-    def __init__(self, layers_description):
+    def __init__(self, layers_description, _seed):
+        np.random.seed(_seed)
         self.layers = []
         self.biases = []
-        self.node_values = []
+        self.node_values_pre_activation = []
 
         self.activation = lambda x: sf.sigmoid(x)
         self.activation_derivative = lambda x: sf.sigmoid_derivative(x)
@@ -19,7 +22,9 @@ class MlpBase:
         self.descent_length = 0.1
 
         for i in range(len(layers_description) - 1):
-            self.layers.append(np.random.random((layers_description[i + 1], layers_description[i])))
+            self.layers.append(
+                np.random.uniform(low=-0.5, high=0.5, size=(layers_description[i + 1], layers_description[i])))
+
             # self.biases.append(np.random.random(size=layers_description[i + 1]))
             self.biases.append(np.zeros(layers_description[i + 1]))
 
@@ -27,14 +32,16 @@ class MlpBase:
         if len(_input) != len(self.layers[0][0]):
             raise Exception(f'vector was {len(_input)}, network 1st layer is {len(self.layers[0][0])}')
 
+        self.node_values_pre_activation.append(_input)
         for i in range(len(self.layers) - 1):
-            self.node_values.append(_input)
+
             _input = self.layers[i] @ _input + self.biases[i]
+            self.node_values_pre_activation.append(_input)
             _input = self.activation(_input)
 
-        if len(self.layers) - 1 > 0:
-            self.node_values.append(_input)
+        if len(self.layers) - 1 >= 0:
             _input = self.layers[len(self.layers) - 1] @ _input + self.biases[len(self.layers) - 1]
+            self.node_values_pre_activation.append(_input)
             _input = self.last_layer_activation(_input)
 
         return _input
@@ -42,13 +49,13 @@ class MlpBase:
     def backpropagation(self, output, expected_output):
         error_delta = []
 
-        last_delta = self.loss_gradient(output, expected_output) * self.last_layer_activation_derivative(output)
+        last_delta = (self.loss_gradient(output, expected_output) *
+                      self.last_layer_activation_derivative(self.node_values_pre_activation[self.layer_count()]))
         error_delta.insert(0, last_delta)
 
-        for i in reversed(range(self.layer_count())):
-            b = np.transpose(self.layers[i]) @ error_delta[0]
-            c = self.activation_derivative(self.node_values[i])
-            current_delta = c * b
+        for i in reversed(range(self.layer_count() - 1)):
+            current_delta = ((self.layers[i] @ error_delta[0]) *
+                             self.activation_derivative(self.node_values_pre_activation[i+1]))
 
             error_delta.insert(0, current_delta)
 
@@ -56,13 +63,17 @@ class MlpBase:
 
     def descent(self, error_deltas):
         for i in range(self.layer_count()):
-            gradient = error_deltas[i] @ np.transpose(self.node_values[i])
+            a = error_deltas[i][np.newaxis].transpose()
+            b = self.activation(self.node_values_pre_activation[i])[np.newaxis]
+            gradient = a @ b
             self.layers[i] -= self.descent_length * gradient
 
     def learn(self, _input, expected_output):
         output = self.operation(_input)
         deltas = self.backpropagation(output, expected_output)
         self.descent(deltas)
+
+        return deltas
 
     def layer_count(self):
         return len(self.layers)
