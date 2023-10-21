@@ -2,14 +2,11 @@ from read_file import *
 from MlpBase import MlpBase
 import numpy as np
 
-seed = 1887692902  # any number
-rand = np.random.default_rng(seed)
-# example: rand.normal(0, 1, self.dim)
-
+np.seterr(all='raise')
 
 # temporary function for testing and getting feedback from mlp
 def peek():
-    mlp = MlpBase([10, 10, 10, 5, 1])
+    mlp = MlpBase([2, 1], _seed=1002)
     """
     output = mlp.operation([0.5, 0.5, 0.5])
     print(f"out={output}")
@@ -17,10 +14,17 @@ def peek():
 
     # test()
     for i in range(10000):
-        mlp.learn(np.array([0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3]), np.array([0.5]))
+        expected_output = [0.2]
+        deltas = mlp.learn(np.array([0.3, 0.6]), np.array(expected_output))
+        #try:
+            #deltas = mlp.learn(np.array([0.3, 0.3]), np.array(expected_output))
+        #except Exception:
+            #break
+
         if i % 1000 == 0:
-            output = mlp.operation(np.array([0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3]))
-            print(f"{mlp.loss(output, np.array([0.5]))}, {output}")
+            output = mlp.operation(np.array([0.3, 0.6]))
+            print(f"{mlp.loss(output, np.array(expected_output))}, {output}")
+
 
 
 # def test():

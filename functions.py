@@ -7,6 +7,7 @@ def sigmoid(x):
 
 def sigmoid_derivative(x):
     return sigmoid(x) * (1 - sigmoid(x))
+    # return x
 
 
 def mean_squared_error(a, b):
@@ -18,3 +19,4 @@ def mean_squared_error_derivative_a(a, b):
     if len(a) != len(b):
         raise Exception(f"vector lengths in mse: {len(a)}, {len(b)}")
     return 2 * (a - b) / len(a)
+
