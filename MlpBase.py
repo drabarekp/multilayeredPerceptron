@@ -2,9 +2,6 @@ import numpy as np
 import functions as sf
 
 
-# DONE: added seed
-
-
 class MlpBase:
     def __init__(self, layers_description, _seed):
         np.random.seed(_seed)
@@ -12,14 +9,14 @@ class MlpBase:
         self.biases = []
         self.node_values_pre_activation = []
 
-        self.activation = lambda x: sf.sigmoid(x)
-        self.activation_derivative = lambda x: sf.sigmoid_derivative(x)
-        self.last_layer_activation = lambda x: sf.sigmoid(x)
-        self.last_layer_activation_derivative = lambda x: sf.sigmoid_derivative(x)
+        self.activation = lambda x: sf.arctan(x)
+        self.activation_derivative = lambda x: sf.arctan_derivative(x)
+        self.last_layer_activation = lambda x: sf.arctan(x)
+        self.last_layer_activation_derivative = lambda x: sf.arctan_derivative(x)
         self.loss = lambda a, b: sf.mean_squared_error(a, b)
-        self.loss_gradient = lambda a, b: sf.mean_squared_error_derivative_a(a, b)
+        self.loss_gradient = lambda a, b: sf.mean_squared_error_derivative(a, b)
 
-        self.descent_length = 0.1
+        self.descent_length = 0.01
 
         for i in range(len(layers_description) - 1):
             self.layers.append(
