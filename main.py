@@ -3,6 +3,7 @@ from MlpBase import MlpBase
 import numpy as np
 import functions as fn
 from page import plot_iterations
+from plots import *
 
 np.seterr(all='raise')
 
@@ -66,10 +67,29 @@ def peek(data_input, data_output):
 #     print(fn.mean_absolute_error_derivative(a, b))
 
 
+# def test_plots():
+#     dc_in, dc_out = read_classification('data_classification/data.three_gauss.train.100.csv')
+#     dr_in, dr_out = read_regression('data_regression/data.activation.train.100.csv')
+#
+#     mc = MlpBase([2, 8, 8, 3], _seed=1002)
+#     mr = MlpBase([1, 4, 4, 1], _seed=1002)
+#
+#     plot_classification_points(dc_in, dc_out)
+#     plot_classification_score(dc_in, dc_out, mc)
+#     plot_classification_score_by_class(dc_in, dc_out, mc, 0)
+#     plot_classification_score_by_class(dc_in, dc_out, mc, 1)
+#     plot_classification_score_by_class(dc_in, dc_out, mc, 2)
+#
+#     plot_regression_points(dr_in, dr_out)
+#     plot_regression_line(dr_in, dr_out, mr)
+
+
 # main
 if __name__ == '__main__':
-    d_in, d_out = read_classification('data_classification/data.three_gauss.train.100.csv')
-    # d_in, d_out = read_regression('data_regression/data.activation.test.100.csv')
+    pass
+
+    # dc_in, dc_out = read_classification('data_classification/data.three_gauss.train.100.csv')
+    # dr_in, dr_out = read_regression('data_regression/data.activation.test.100.csv')
 
     # data = [
     #     [[0.1, 0.2, 0.3, 0.4, 0.1, 0.2, 0.3, 0.4, 0.1, 0.2, 0.3, 0.4],
@@ -85,4 +105,5 @@ if __name__ == '__main__':
     # a = np.array([1, 2, 3])
     # b = np.array([4, 5, 7])
     # print(fn.relu(a))
-    peek(d_in, d_out)
+
+    # peek(d_in, d_out)
