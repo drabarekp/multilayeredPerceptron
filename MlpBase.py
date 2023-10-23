@@ -8,38 +8,44 @@ class MlpBase:
         self.layers = []
         self.biases = []
         self.node_values_pre_activation = []
+        self.node_values_activated = []
 
-        self.activation = lambda x: sf.arctan(x)
-        self.activation_derivative = lambda x: sf.arctan_derivative(x)
-        self.last_layer_activation = lambda x: sf.arctan(x)
-        self.last_layer_activation_derivative = lambda x: sf.arctan_derivative(x)
+        self.activation = lambda x: sf.sigmoid(x)
+        self.activation_derivative = lambda x: sf.sigmoid_derivative(x)
+        self.last_layer_activation = lambda x: sf.sigmoid(x)
+        self.last_layer_activation_derivative = lambda x: sf.sigmoid_derivative(x)
         self.loss = lambda a, b: sf.mean_squared_error(a, b)
         self.loss_gradient = lambda a, b: sf.mean_squared_error_derivative(a, b)
 
-        self.descent_length = 0.01
+        self.descent_length = 1
 
         for i in range(len(layers_description) - 1):
             self.layers.append(
-                np.random.uniform(low=-0.5, high=0.5, size=(layers_description[i + 1], layers_description[i])))
+                np.random.uniform(low=-1, high=1, size=(layers_description[i + 1], layers_description[i])))
 
             # self.biases.append(np.random.random(size=layers_description[i + 1]))
-            self.biases.append(np.zeros(layers_description[i + 1]))
+            self.biases.append(np.random.uniform(low=-0.5, high=0.5, size=(layers_description[i + 1])))
 
     def operation(self, _input):
+        self.node_values_pre_activation = []
+        self.node_values_activated = []
+
         if len(_input) != len(self.layers[0][0]):
             raise Exception(f'vector was {len(_input)}, network 1st layer is {len(self.layers[0][0])}')
 
         self.node_values_pre_activation.append(_input)
+        self.node_values_activated.append(_input)
         for i in range(len(self.layers) - 1):
-
             _input = self.layers[i] @ _input + self.biases[i]
             self.node_values_pre_activation.append(_input)
             _input = self.activation(_input)
+            self.node_values_activated.append(_input)
 
         if len(self.layers) - 1 >= 0:
             _input = self.layers[len(self.layers) - 1] @ _input + self.biases[len(self.layers) - 1]
             self.node_values_pre_activation.append(_input)
             _input = self.last_layer_activation(_input)
+            self.node_values_activated.append(_input)
 
         return _input
 
@@ -63,15 +69,16 @@ class MlpBase:
     def descent(self, error_deltas):
         for i in range(self.layer_count()):
             a = error_deltas[i][np.newaxis].transpose()
-            b = self.activation(self.node_values_pre_activation[i])[np.newaxis]
+            b = self.node_values_activated[i][np.newaxis]
+
             gradient = a @ b
             self.layers[i] -= self.descent_length * gradient
+            self.biases[i] -= self.descent_length * error_deltas[i]
 
     def learn(self, _input, expected_output):
         output = self.operation(_input)
         deltas = self.backpropagation(output, expected_output)
         self.descent(deltas)
-
         return deltas
 
     def layer_count(self):
