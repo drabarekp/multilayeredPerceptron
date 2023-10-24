@@ -1,7 +1,6 @@
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from MlpBase import MlpBase
 
 REGRESSION_POINTS = 500
 REGRESSION_OVERHEAD = 0.5

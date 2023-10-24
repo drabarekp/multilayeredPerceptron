@@ -1,13 +1,13 @@
 import numpy as np
 
 
-def sigmoid(x):     # TODO: check correctness
+def sigmoid(x):
     #
-    if min(x) < -64:
-        allowed = np.full(x.shape, -256)
+    if min(x) < -128:
+        allowed = np.full(x.shape, -128)
         x = np.maximum(x, allowed)
-    if max(x) > 64:
-        allowed = np.full(x.shape, 256)
+    if max(x) > 128:
+        allowed = np.full(x.shape, 128)
         x = np.minimum(x, allowed)
     return np.exp(-np.logaddexp(0, -x))
 
