@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 import functions as sf
 
@@ -5,6 +7,7 @@ import functions as sf
 class MlpBase:
     def __init__(self, layers_description, _seed):
         np.random.seed(_seed)
+        self.layers_description = layers_description
         self.layers = []
         self.biases = []
         self.node_values_pre_activation = []
@@ -17,7 +20,7 @@ class MlpBase:
         self.loss = lambda a, b: sf.mean_squared_error(a, b)
         self.loss_gradient = lambda a, b: sf.mean_squared_error_derivative(a, b)
 
-        self.descent_length = 1
+        self.descent_length = 0.1
 
         for i in range(len(layers_description) - 1):
             self.layers.append(
@@ -51,7 +54,6 @@ class MlpBase:
 
     def backpropagation(self, output, expected_output):
         error_delta = []
-
         last_delta = (self.loss_gradient(output, expected_output) *
                       self.last_layer_activation_derivative(self.node_values_pre_activation[self.layer_count()]))
         error_delta.insert(0, last_delta)
@@ -79,7 +81,37 @@ class MlpBase:
         output = self.operation(_input)
         deltas = self.backpropagation(output, expected_output)
         self.descent(deltas)
-        return deltas
+
+        return output
+
+    def learn_iteration(self, train_input, train_output, test_input, test_output):
+        old_layers = copy.deepcopy(self.layers)
+        old_biases = copy.deepcopy(self.biases)
+
+        train_size = train_input.shape[0]
+        test_size = test_input.shape[0]
+        train_error = 0
+        test_error = 0
+
+        for pos in range(train_size):
+            output = self.learn(train_input[pos], train_output[pos])
+            train_error += self.loss(train_output[pos], output)
+        train_error /= train_size
+
+        for pos in range(test_size):
+            output = self.operation(test_input[pos])
+            test_error += self.loss(test_output[pos], output)
+        test_error /= test_size
+
+        current_layers = copy.deepcopy(self.layers)
+        current_biases = copy.deepcopy(self.biases)
+        delta_layers = np.subtract(self.layers, old_layers).tolist()
+        delta_biases = np.subtract(self.biases, old_biases).tolist()
+
+        current_biases.insert(0, np.zeros(self.layers_description[0]))
+        delta_biases.insert(0, np.zeros(self.layers_description[0]))
+
+        return current_layers, current_biases, delta_layers, delta_biases, train_error, test_error
 
     def layer_count(self):
         return len(self.layers)

@@ -1,5 +1,8 @@
 import plotly.graph_objects as go
-# import networkx as nx
+
+
+def flatten_comprehension(matrix):
+    return [item for row in matrix for item in row]
 
 
 def get_figure(data, layers):
@@ -20,7 +23,6 @@ def get_figure(data, layers):
             node_y.append(placements_y[ly])
 
     index = 0
-    # position = 0
     edge_x = []
     edge_y = []
     for i in range(layer_count - 1):
@@ -36,28 +38,30 @@ def get_figure(data, layers):
 
         index += layers[i]
 
-    edge_width = [-2.1, -1.2, 1.3, -0.1, -2.2, 0.3, -2.1, -0.2, 1.3, -0.1, -2.2, 2.3, -0.2, -0.3]
-    edge_change = [0.1, 0.2, -0.3, 0.4, 0.1, 0.2, -0.3, 0.4, 0.1, -0.2, 0.1, -0.2, 0.3, 0.4]
+    edge_width = flatten_comprehension(flatten_comprehension(data[0]))
+    edge_change = flatten_comprehension(flatten_comprehension(data[2]))
+
+    node_value = flatten_comprehension(data[1])
+    node_change = flatten_comprehension(data[3])
 
     edge_trace = [go.Scatter(
             x=edge_x[3 * i:3 * i + 3], y=edge_y[3 * i:3 * i + 3],
             mode='lines+text',
-            text=['', '{:4.2f} ({:+4.2f})'.format(edge_width[i], edge_change[i]), ''],
+            text=['', '<br>{:4.2f}<br>(Δ{:+4.2f})'.format(edge_width[i], edge_change[i]), ''],
             hoverinfo='none',
             textposition='bottom center',
             line=dict(width=abs(edge_width[i]), color='red' if edge_width[i] < 0 else 'green'))
         for i in range(len(edge_width))]
 
-    node_change = [0, -0.2, 0.3, 0.4, -0.1, 0.2, -0.3, -0.4]
-
     node_trace = [go.Scatter(
         x=[node_x[i]], y=[node_y[i]],
         mode='markers+text',
         hoverinfo='none',
-        text='({:+4.2f})'.format(node_change[i]),
+        text='bias:<br>{:4.2f} (Δ{:+4.2f})'.format(node_value[i], node_change[i])
+        if i >= layers[0] else '<br>IN {}'.format(i + 1),
         textposition='bottom center',
         marker=dict(
-            color='red' if node_change[i] < 0 else 'green' if node_change[i] > 0 else 'azure',
+            color='red' if node_value[i] < 0 else 'green' if node_value[i] > 0 else 'azure',
             size=15,
             line_width=1)
     ) for i in range(len(node_change))]
@@ -65,13 +69,13 @@ def get_figure(data, layers):
     edge_trace.extend(node_trace)
     fig = go.Figure(data=edge_trace,
                     layout=go.Layout(
-                        title='Network graph made with Python',  # TODO
+                        title='Bias and weights distribution against iterations',
                         titlefont_size=16,
                         showlegend=False,
                         hovermode='closest',
                         margin=dict(b=20, l=5, r=5, t=40),
                         annotations=[dict(
-                            text="Python code",  # TODO
+                            text="S. Górski, P. Drabarek",
                             showarrow=False,
                             xref="paper", yref="paper",
                             x=0.005, y=-0.002)],
