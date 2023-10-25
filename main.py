@@ -6,11 +6,12 @@ from DataNormalizator import DataNormalizator
 from figure import get_figure
 from functions import *
 from read_file import read_classification, read_regression, normalize_regression
+from MnistAnalyzer import MnistAnalyzer
 
 np.seterr(all='raise')
 ITER = 100
 LAYERS = [1, 4, 4, 1]
-SEED = 1002
+SEED = 1666
 
 app = Dash('Network plot')
 DATA = []   # data must be accessible for automatic calls
@@ -48,22 +49,27 @@ def peek(data_input, data_output, test_input, test_output):
 
 if __name__ == '__main__':
 
+    mnist = MnistAnalyzer()
+    # mnist.get_labels('mnist/train-images.idx1-ubyte')
+    mnist.get_images('mnist/train-images.idx3-ubyte')
+
+
     # read_classification('data_classification/data.three_gauss.train.100.csv')
-
-    train_in, train_out = read_regression('data_regression/data.activation.train.100.csv')
-    test_in, test_out = read_regression('data_regression/data.activation.test.100.csv')
-    train_in, train_out, test_in, test_out = normalize_regression(train_in, train_out, test_in, test_out)
-
-    peek(train_in, train_out, test_in, test_out)
-
-    ticks = {x: str(x) for x in [x for x in range(200, 10000, 200)]}
-    ticks[1] = str(1)
-
-    app.layout = html.Div([
-        # html.H4('Big text'),
-        html.Center("Select iteration:"),
-        dcc.Slider(id='slider', min=1, max=ITER, step=1, value=1, marks=ticks),
-        dcc.Graph(id="graph", style={'width': '98vw', 'height': '90vh'}),
-    ])
-
-    app.run_server(debug=True, use_reloader=False)
+    #
+    # train_in, train_out = read_regression('data_regression/data.activation.train.100.csv')
+    # test_in, test_out = read_regression('data_regression/data.activation.test.100.csv')
+    # train_in, train_out, test_in, test_out = normalize_regression(train_in, train_out, test_in, test_out)
+    #
+    # peek(train_in, train_out, test_in, test_out)
+    #
+    # ticks = {x: str(x) for x in [x for x in range(200, 10000, 200)]}
+    # ticks[1] = str(1)
+    #
+    # app.layout = html.Div([
+    #     # html.H4('Big text'),
+    #     html.Center("Select iteration:"),
+    #     dcc.Slider(id='slider', min=1, max=ITER, step=1, value=1, marks=ticks),
+    #     dcc.Graph(id="graph", style={'width': '98vw', 'height': '90vh'}),
+    # ])
+    #
+    # app.run_server(debug=True, use_reloader=False)
