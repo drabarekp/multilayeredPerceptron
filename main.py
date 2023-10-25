@@ -4,7 +4,7 @@ from dash import Dash, dcc, html, Input, Output
 from MlpBase import MlpBase
 from DataNormalizator import DataNormalizator
 from figure import get_figure
-from functions import sigmoid
+from functions import *
 from read_file import read_classification, read_regression, normalize_regression
 
 np.seterr(all='raise')
@@ -23,7 +23,16 @@ def select_iteration(number):
 
 
 def peek(data_input, data_output, test_input, test_output):
-    mlp = MlpBase(LAYERS, _seed=SEED)
+    mlp = MlpBase(layers_description=LAYERS,
+                  _seed=SEED,
+                  activation=sigmoid,
+                  activation_derivative=sigmoid_derivative,
+                  last_layer_activation=sigmoid,
+                  last_layer_activation_derivative=sigmoid_derivative,
+                  loss=mean_squared_error,
+                  loss_gradient=mean_squared_error_derivative,
+                  descent_length=0.1
+                  )
 
     iterations = []
     for i in range(ITER):

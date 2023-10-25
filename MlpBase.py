@@ -5,7 +5,10 @@ import functions as sf
 
 
 class MlpBase:
-    def __init__(self, layers_description, _seed):
+    def __init__(self, layers_description, _seed,
+                 activation, activation_derivative, last_layer_activation, last_layer_activation_derivative,
+                 loss, loss_gradient, descent_length):
+
         np.random.seed(_seed)
         self.layers_description = layers_description
         self.layers = []
@@ -13,14 +16,21 @@ class MlpBase:
         self.node_values_pre_activation = []
         self.node_values_activated = []
 
-        self.activation = lambda x: sf.sigmoid(x)
-        self.activation_derivative = lambda x: sf.sigmoid_derivative(x)
-        self.last_layer_activation = lambda x: sf.sigmoid(x)
-        self.last_layer_activation_derivative = lambda x: sf.sigmoid_derivative(x)
-        self.loss = lambda a, b: sf.mean_squared_error(a, b)
-        self.loss_gradient = lambda a, b: sf.mean_squared_error_derivative(a, b)
+        self.activation = activation
+        self.activation_derivative = activation_derivative
+        self.last_layer_activation = last_layer_activation
+        self.last_layer_activation_derivative = last_layer_activation_derivative
+        self.loss = loss
+        self.loss_gradient = loss_gradient
 
-        self.descent_length = 0.1
+        # self.activation = lambda x: sf.sigmoid(x)
+        # self.activation_derivative = lambda x: sf.sigmoid_derivative(x)
+        # self.last_layer_activation = lambda x: sf.sigmoid(x)
+        # self.last_layer_activation_derivative = lambda x: sf.sigmoid_derivative(x)
+        # self.loss = lambda a, b: sf.mean_squared_error(a, b)
+        # self.loss_gradient = lambda a, b: sf.mean_squared_error_derivative(a, b)
+
+        self.descent_length = descent_length
 
         for i in range(len(layers_description) - 1):
             self.layers.append(
@@ -85,8 +95,8 @@ class MlpBase:
         return output
 
     def learn_iteration(self, train_input, train_output, test_input, test_output):
-        old_layers = copy.deepcopy(self.layers)
-        old_biases = copy.deepcopy(self.biases)
+        # old_layers = copy.deepcopy(self.layers)
+        # old_biases = copy.deepcopy(self.biases)
 
         train_size = train_input.shape[0]
         test_size = test_input.shape[0]
@@ -103,15 +113,16 @@ class MlpBase:
             test_error += self.loss(test_output[pos], output)
         test_error /= test_size
 
-        current_layers = copy.deepcopy(self.layers)
-        current_biases = copy.deepcopy(self.biases)
-        delta_layers = np.subtract(self.layers, old_layers).tolist()
-        delta_biases = np.subtract(self.biases, old_biases).tolist()
+        # current_layers = copy.deepcopy(self.layers)
+        # current_biases = copy.deepcopy(self.biases)
+        # delta_layers = np.subtract(self.layers, old_layers).tolist()
+        # delta_biases = np.subtract(self.biases, old_biases).tolist()
+        #
+        # current_biases.insert(0, np.zeros(self.layers_description[0]))
+        # delta_biases.insert(0, np.zeros(self.layers_description[0]))
 
-        current_biases.insert(0, np.zeros(self.layers_description[0]))
-        delta_biases.insert(0, np.zeros(self.layers_description[0]))
-
-        return current_layers, current_biases, delta_layers, delta_biases, train_error, test_error
+        return [], [], [], [], train_error, test_error
+        #return current_layers, current_biases, delta_layers, delta_biases, train_error, test_error
 
     def layer_count(self):
         return len(self.layers)
