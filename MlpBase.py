@@ -23,13 +23,6 @@ class MlpBase:
         self.loss = loss
         self.loss_gradient = loss_gradient
 
-        # self.activation = lambda x: sf.sigmoid(x)
-        # self.activation_derivative = lambda x: sf.sigmoid_derivative(x)
-        # self.last_layer_activation = lambda x: sf.sigmoid(x)
-        # self.last_layer_activation_derivative = lambda x: sf.sigmoid_derivative(x)
-        # self.loss = lambda a, b: sf.mean_squared_error(a, b)
-        # self.loss_gradient = lambda a, b: sf.mean_squared_error_derivative(a, b)
-
         self.descent_length = descent_length
 
         for i in range(len(layers_description) - 1):
