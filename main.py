@@ -2,8 +2,10 @@ import numpy as np
 
 from dash import Dash, dcc, html, Input, Output
 from MlpBase import MlpBase
+from DataNormalizator import DataNormalizator
 from figure import get_figure
-from read_file import read_classification, read_regression
+from functions import sigmoid
+from read_file import read_classification, read_regression, normalize_regression
 
 np.seterr(all='raise')
 ITER = 100
@@ -35,58 +37,14 @@ def peek(data_input, data_output, test_input, test_output):
     global DATA
     DATA = iterations
 
-# def test_np():
-#     val = np.array([1, 2, 3]) * np.transpose(np.array([5, 4, 3]))
-#     print(val)
-
-
-# def test_fn():
-#     a = np.array([1, 2, 3])
-#     b = np.array([4, 5, 7])
-#
-#     print(fn.sigmoid(a[1]))
-#     print(fn.relu(a[1]))
-#     print(fn.arctan(a[1]))
-#
-#     print(fn.sigmoid_derivative(a[1]))
-#     print(fn.relu_derivative(a[1]))
-#     print(fn.arctan_derivative(a[1]))
-#
-#     print(fn.sigmoid(a))
-#     print(fn.relu(a))
-#     print(fn.arctan(a))
-#     print(fn.mean_squared_error(a, b))
-#     print(fn.mean_absolute_error(a, b))
-#
-#     print(fn.sigmoid_derivative(a))
-#     print(fn.relu_derivative(a))
-#     print(fn.arctan_derivative(a))
-#     print(fn.mean_squared_error_derivative(a, b))
-#     print(fn.mean_absolute_error_derivative(a, b))
-
-
-# def test_plots():
-#     dc_in, dc_out = read_classification('data_classification/data.three_gauss.train.100.csv')
-#     train_in, train_out = read_regression('data_regression/data.activation.train.100.csv')
-#
-#     mc = MlpBase([2, 8, 8, 3], _seed=1002)
-#     mr = MlpBase([1, 4, 4, 1], _seed=1002)
-#
-#     plot_classification_points(dc_in, dc_out)
-#     plot_classification_score(dc_in, dc_out, mc)
-#     plot_classification_score_by_class(dc_in, dc_out, mc, 0)
-#     plot_classification_score_by_class(dc_in, dc_out, mc, 1)
-#     plot_classification_score_by_class(dc_in, dc_out, mc, 2)
-#
-#     plot_regression_points(train_in, train_out)
-#     plot_regression_line(train_in, train_out, mr)
-
-
 if __name__ == '__main__':
+
     # read_classification('data_classification/data.three_gauss.train.100.csv')
 
     train_in, train_out = read_regression('data_regression/data.activation.train.100.csv')
-    test_in, test_out = read_regression('data_regression/data.activation.train.100.csv')
+    test_in, test_out = read_regression('data_regression/data.activation.test.100.csv')
+    train_in, train_out, test_in, test_out = normalize_regression(train_in, train_out, test_in, test_out)
+
     peek(train_in, train_out, test_in, test_out)
 
     ticks = {x: str(x) for x in [x for x in range(200, 10000, 200)]}
