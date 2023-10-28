@@ -21,11 +21,12 @@ def read_regression(path):
     data_input = np.reshape(data[:, 0], (-1, 1))
     data_output = np.reshape(data[:, 1], (-1, 1))
 
-    return  data_input, data_output
+    return data_input, data_output
+
 
 # those have to be in the same function
 def normalize_regression(train_in, train_out, test_in, test_out):
-    dn = DataNormalizator();
+    dn = DataNormalizator()
     start_input = min(train_in)
     end_input = max(train_in)
     start_output = min(train_out)
