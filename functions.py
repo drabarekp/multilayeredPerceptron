@@ -1,6 +1,14 @@
 import numpy as np
 
 
+def linear(x):
+    return x
+
+
+def linear_derivative(x):
+    return 1
+
+
 def sigmoid(x):
     #
     if min(x) < -128:

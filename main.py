@@ -6,8 +6,9 @@ from plots import plot_classification, plot_regression
 from read_file import read_classification, read_regression, normalize_regression
 
 np.seterr(all='raise')
-ITER = 100
-LAYERS = [2, 4, 4, 3]
+DESC_LENGTH = 0.003
+ITER = 10000
+LAYERS = [2, 4, 6, 4, 3]
 SEED = 1002
 
 app = Dash('Network plot')
@@ -29,7 +30,7 @@ def peek(data_input, data_output, test_input, test_output):
                   last_layer_activation_derivative=sigmoid_derivative,
                   loss=mean_squared_error,
                   loss_gradient=mean_squared_error_derivative,
-                  descent_length=0.1)
+                  descent_length=DESC_LENGTH)
 
     iterations = []
     for i in range(ITER):
