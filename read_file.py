@@ -15,7 +15,7 @@ def read_classification(path):
 
 
 def read_regression(path):
-    dn = DataNormalizator()
+    # dn = DataNormalizator()
     data = np.genfromtxt(path, delimiter=',', skip_header=1, dtype=np.float64)
 
     data_input = np.reshape(data[:, 0], (-1, 1))
