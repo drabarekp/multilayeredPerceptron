@@ -1,9 +1,9 @@
 from dash import Dash, dcc, html, Input, Output
-from MlpBase import MlpBase
 from figure import get_figure
 from functions import *
+from MlpBase import MlpBase
+from plots import plot_classification, plot_regression
 from read_file import read_classification, read_regression, normalize_regression
-from plots import *
 
 np.seterr(all='raise')
 ITER = 100
@@ -37,7 +37,7 @@ def peek(data_input, data_output, test_input, test_output):
         iterations.append(iteration_data)
 
         if i % 10 == 9:
-            print('ITERATION {:5d}: TRAIN ERROR = {:9.4f}, TEST ERROR = {:9.4f}'.format(
+            print('ITERATION {:6d}: TRAIN ERROR = {:7.4f}, TEST ERROR = {:7.4f}'.format(
                 i + 1, iteration_data[4], iteration_data[5]))
 
     global DATA
@@ -73,4 +73,4 @@ if __name__ == '__main__':
     plot_classification(train_in, train_out, test_in, test_out, model)
     # plot_regression(train_in, train_out, test_in, test_out, model)
 
-    show_network()
+    # show_network()
