@@ -1,15 +1,22 @@
 from dash import Dash, dcc, html, Input, Output
+
+from MlpBase import MlpBase
+from DataNormalizator import DataNormalizator
+from MlpSerializer import MlpSerializer
 from figure import get_figure
 from functions import *
 from MlpBase import MlpBase
 from plots import plot_classification, plot_regression
 from read_file import read_classification, read_regression, normalize_regression
+from MnistAnalyzer import MnistAnalyzer
 
 np.seterr(all='raise')
+
 DESC_LENGTH = 0.003
 ITER = 10000
 LAYERS = [2, 4, 6, 4, 3]
 SEED = 1002
+
 
 app = Dash('Network plot')
 DATA = []   # data must be accessible for automatic calls
@@ -47,6 +54,7 @@ def peek(data_input, data_output, test_input, test_output):
     return mlp
 
 
+
 def show_network():
     ticks = {x: str(x) for x in [x for x in range(200, 10000, 200)]}
     if ITER not in ticks.keys():
@@ -75,3 +83,4 @@ if __name__ == '__main__':
     # plot_regression(train_in, train_out, test_in, test_out, model)
 
     # show_network()
+

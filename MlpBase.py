@@ -122,6 +122,7 @@ class MlpBase:
 
         return current_layers, current_biases, delta_layers, delta_biases, train_error, test_error
 
+
     def layer_count(self):
         return len(self.layers)
 
