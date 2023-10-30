@@ -3,6 +3,7 @@ import numpy as np
 from dash import Dash, dcc, html, Input, Output
 from MlpBase import MlpBase
 from DataNormalizator import DataNormalizator
+from MlpSerializer import MlpSerializer
 from figure import get_figure
 from functions import *
 from read_file import read_classification, read_regression, normalize_regression
@@ -50,8 +51,11 @@ def peek(data_input, data_output, test_input, test_output):
 if __name__ == '__main__':
 
     mnist = MnistAnalyzer()
-    # mnist.get_labels('mnist/train-images.idx1-ubyte')
-    mnist.get_images('mnist/train-images.idx3-ubyte')
+    mnist.draw_plot()
+    #mser = MlpSerializer()
+    #nn = mser.deserialize('97rated-network-4200')
+    #mnist.draw_confusion_matrix(nn)
+    #mnist.do_all(SEED)
 
 
     # read_classification('data_classification/data.three_gauss.train.100.csv')

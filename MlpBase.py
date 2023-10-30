@@ -98,12 +98,12 @@ class MlpBase:
 
         for pos in range(train_size):
             output = self.learn(train_input[pos], train_output[pos])
-            train_error += self.loss(train_output[pos], output)
+            train_error += self.loss(output, train_output[pos])
         train_error /= train_size
 
         for pos in range(test_size):
             output = self.operation(test_input[pos])
-            test_error += self.loss(test_output[pos], output)
+            test_error += self.loss(output, test_output[pos])
         test_error /= test_size
 
         # current_layers = copy.deepcopy(self.layers)
@@ -115,7 +115,7 @@ class MlpBase:
         # delta_biases.insert(0, np.zeros(self.layers_description[0]))
 
         return [], [], [], [], train_error, test_error
-        #return current_layers, current_biases, delta_layers, delta_biases, train_error, test_error
+        # return current_layers, current_biases, delta_layers, delta_biases, train_error, test_error
 
     def layer_count(self):
         return len(self.layers)
