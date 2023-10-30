@@ -1,13 +1,19 @@
 import copy
-
 import numpy as np
-import functions as sf
+# import functions as sf
 
 
 class MlpBase:
-    def __init__(self, layers_description, _seed,
-                 activation, activation_derivative, last_layer_activation, last_layer_activation_derivative,
-                 loss, loss_gradient, descent_length):
+    def __init__(self,
+                 layers_description,
+                 _seed,
+                 activation,
+                 activation_derivative,
+                 last_layer_activation,
+                 last_layer_activation_derivative,
+                 loss,
+                 loss_gradient,
+                 descent_length):
 
         np.random.seed(_seed)
         self.layers_description = layers_description
@@ -88,8 +94,8 @@ class MlpBase:
         return output
 
     def learn_iteration(self, train_input, train_output, test_input, test_output):
-        # old_layers = copy.deepcopy(self.layers)
-        # old_biases = copy.deepcopy(self.biases)
+        old_layers = copy.deepcopy(self.layers)
+        old_biases = copy.deepcopy(self.biases)
 
         train_size = train_input.shape[0]
         test_size = test_input.shape[0]
@@ -106,28 +112,28 @@ class MlpBase:
             test_error += self.loss(output, test_output[pos])
         test_error /= test_size
 
-        # current_layers = copy.deepcopy(self.layers)
-        # current_biases = copy.deepcopy(self.biases)
-        # delta_layers = np.subtract(self.layers, old_layers).tolist()
-        # delta_biases = np.subtract(self.biases, old_biases).tolist()
-        #
-        # current_biases.insert(0, np.zeros(self.layers_description[0]))
-        # delta_biases.insert(0, np.zeros(self.layers_description[0]))
+        current_layers = copy.deepcopy(self.layers)
+        current_biases = copy.deepcopy(self.biases)
+        delta_layers = np.subtract(current_layers, old_layers).tolist()
+        delta_biases = np.subtract(current_biases, old_biases).tolist()
 
-        return [], [], [], [], train_error, test_error
-        # return current_layers, current_biases, delta_layers, delta_biases, train_error, test_error
+        current_biases.insert(0, np.zeros(self.layers_description[0]))
+        delta_biases.insert(0, np.zeros(self.layers_description[0]))
+
+        return current_layers, current_biases, delta_layers, delta_biases, train_error, test_error
+
 
     def layer_count(self):
         return len(self.layers)
 
     def __str__(self):
-        result = "layers:\n"
+        result = 'layers:\n'
         for i in range(len(self.layers)):
             result += self.layers[i].__str__()
-            result += "\n\n"
-        result += "biases:\n"
+            result += '\n\n'
+        result += 'biases:\n'
         for i in range(len(self.biases)):
             result += self.biases[i].__str__()
-            result += "\n"
+            result += '\n'
 
         return result

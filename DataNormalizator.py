@@ -15,6 +15,7 @@ class DataNormalizator:
     #     return np.array(list(map(f, input_data)))
 
     # e.g. [-3, 7] -> [0, 1], then -13 -> -1 and 17 -> 2
+
     @staticmethod
     def linear_normalize_into_unit_with_range(input_data, start, end):
         length = end - start
