@@ -12,9 +12,9 @@ from MnistAnalyzer import MnistAnalyzer
 
 np.seterr(all='raise')
 
-DESC_LENGTH = 0.003
+DESC_LENGTH = 0.1
 ITER = 10000
-LAYERS = [2, 4, 6, 4, 3]
+LAYERS = [2, 4, 8, 6, 4]
 SEED = 1002
 
 
@@ -70,8 +70,8 @@ def show_network():
 
 
 if __name__ == '__main__':
-    train_in, train_out = read_classification('data_classification/data.three_gauss.train.100.csv')
-    test_in, test_out = read_classification('data_classification/data.three_gauss.test.100.csv')
+    train_in, train_out = read_classification('data_classification/data.circles.train.500.csv')
+    test_in, test_out = read_classification('data_classification/data.circles.test.500.csv')
 
     # train_in, train_out = read_regression('data_regression/data.activation.train.100.csv')
     # test_in, test_out = read_regression('data_regression/data.activation.test.100.csv')
