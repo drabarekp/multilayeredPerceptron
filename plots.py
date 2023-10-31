@@ -69,8 +69,8 @@ def plot_classification_input(train_input, train_output, test_input, test_output
             go.Scatter(
                 x=plot_train[:, 0], y=plot_train[:, 1],
                 marker=dict(
-                    color='red' if color == 0 else 'green' if color == 1 else 'blue',
-                    symbol='circle' if color == 0 else 'diamond' if color == 1 else 'square',
+                    color='red' if color == 0 else 'green' if color == 1 else 'blue' if color == 2 else 'yellow',
+                    symbol='circle' if color == 0 else 'diamond' if color == 1 else 'square' if color == 2 else 'cross',
                     size=15,
                     line_width=1),
                 name=f'Class {color + 1} (training set)',
@@ -80,8 +80,9 @@ def plot_classification_input(train_input, train_output, test_input, test_output
             go.Scatter(
                 x=plot_test[:, 0], y=plot_test[:, 1],
                 marker=dict(
-                    color='red' if color == 0 else 'green' if color == 1 else 'blue',
-                    symbol='circle-dot' if color == 0 else 'diamond-dot' if color == 1 else 'square-dot',
+                    color='red' if color == 0 else 'green' if color == 1 else 'blue' if color == 2 else 'yellow',
+                    symbol='circle-dot' if color == 0 else 'diamond-dot' if color == 1 else 'square-dot'
+                    if color == 2 else 'cross-dot',
                     size=15,
                     line_width=1),
                 name=f'Class {color + 1} (testing set)',
@@ -124,16 +125,16 @@ def plot_classification_output(train_input, train_output, test_input, test_outpu
         test_classes = np.concatenate((np.array([color]), test_classes), axis=0)
 
         train_classes = ['red' if train_classes[i] == 0 else 'green' if train_classes[i] == 1 else 'blue'
-                         for i in range(len(train_classes))]
+                         if train_classes[i] == 2 else 'yellow' for i in range(len(train_classes))]
         test_classes = ['red' if test_classes[i] == 0 else 'green' if test_classes[i] == 1 else 'blue'
-                        for i in range(len(test_classes))]
+                        if test_classes[i] == 2 else 'yellow' for i in range(len(test_classes))]
 
         plots.append(
             go.Scatter(
                 x=plot_train[:, 0], y=plot_train[:, 1],
                 marker=dict(
                     color=train_classes,
-                    symbol='circle' if color == 0 else 'diamond' if color == 1 else 'square',
+                    symbol='circle' if color == 0 else 'diamond' if color == 1 else 'square' if color == 2 else 'cross',
                     size=15,
                     line_width=1),
                 name=f'Class {color + 1} (training set)',
@@ -144,7 +145,8 @@ def plot_classification_output(train_input, train_output, test_input, test_outpu
                 x=plot_test[:, 0], y=plot_test[:, 1],
                 marker=dict(
                     color=test_classes,
-                    symbol='circle-dot' if color == 0 else 'diamond-dot' if color == 1 else 'square-dot',
+                    symbol='circle-dot' if color == 0 else 'diamond-dot' if color == 1 else 'square-dot' if color == 2
+                    else 'cross-dot',
                     size=15,
                     line_width=1),
                 name=f'Class {color + 1} (testing set)',
@@ -196,7 +198,7 @@ def plot_classification_score(train_input, train_output, test_input, test_output
                 colorscale='Greys',
                 colorbar=dict(
                     thickness=20),
-                symbol='circle' if color == 0 else 'diamond' if color == 1 else 'square',
+                symbol='circle' if color == 0 else 'diamond' if color == 1 else 'square' if color == 2 else 'cross',
             ),
             name=f'Class {color + 1} (training set)',
             mode='markers',
@@ -212,7 +214,8 @@ def plot_classification_score(train_input, train_output, test_input, test_output
                 colorscale='Greys',
                 colorbar=dict(
                     thickness=20),
-                symbol='circle-dot' if color == 0 else 'diamond-dot' if color == 1 else 'square-dot',
+                symbol='circle-dot' if color == 0 else 'diamond-dot' if color == 1 else 'square-dot' if color == 2
+                else 'cross-dot',
             ),
             name=f'Class {color + 1} (testing set)',
             mode='markers',
@@ -264,7 +267,7 @@ def plot_classification_score_by_class(train_input, train_output, test_input, te
                 colorscale='Greys',
                 colorbar=dict(
                     thickness=20),
-                symbol='circle' if color == 0 else 'diamond' if color == 1 else 'square',
+                symbol='circle' if color == 0 else 'diamond' if color == 1 else 'square' if color == 2 else 'cross',
             ),
             name=f'Class {color + 1} (training set)',
             mode='markers',
@@ -280,7 +283,8 @@ def plot_classification_score_by_class(train_input, train_output, test_input, te
                 colorscale='Greys',
                 colorbar=dict(
                     thickness=20),
-                symbol='circle-dot' if color == 0 else 'diamond-dot' if color == 1 else 'square-dot',
+                symbol='circle-dot' if color == 0 else 'diamond-dot' if color == 1 else 'square-dot' if color == 2
+                else 'cross-dot',
             ),
             name=f'Class {color + 1} (testing set)',
             mode='markers',
